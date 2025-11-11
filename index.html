@@ -24,29 +24,115 @@ layout: default
   </div>
 </section>
 
-<section class="features">
+<section class="demo-section">
   <div class="container">
-    <h2 class="section-title">Features</h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">📚</div>
-        <h3>Smart Library</h3>
-        <p>Organize and manage your entire book collection in one beautiful interface.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🎯</div>
-        <h3>Reading Goals</h3>
-        <p>Set and track your reading goals with intuitive progress tracking.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">✨</div>
-        <h3>Beautiful Design</h3>
-        <p>A clean, distraction-free interface that lets you focus on what matters.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🔍</div>
-        <h3>Discover</h3>
-        <p>Find your next favorite book with personalized recommendations.</p>
+    <h2 class="section-title">See Literati in Action</h2>
+    <p class="demo-subtitle">AI-powered research assistant for your academic papers</p>
+    <div class="mockup-badge">Interactive Demo (not exactly what it looks like)</div>
+
+    <div class="app-mockup">
+      <!-- App Window -->
+      <div class="window-frame">
+        <div class="window-titlebar">
+          <div class="window-controls">
+            <span class="window-button close"></span>
+            <span class="window-button minimize"></span>
+            <span class="window-button maximize"></span>
+          </div>
+          <div class="window-title">Literati</div>
+        </div>
+
+        <!-- Main App Content -->
+        <div class="app-content">
+          <!-- Sidebar -->
+          <div class="sidebar">
+            <div class="sidebar-header">
+              <span class="sidebar-icon">📚</span>
+              <span>My Library</span>
+            </div>
+            <div class="sidebar-items">
+              <div class="sidebar-item">
+                <span class="folder-icon">📁</span>
+                <span>AI Research</span>
+              </div>
+              <div class="sidebar-item active">
+                <span class="folder-icon">📁</span>
+                <span>Graph Networks</span>
+              </div>
+              <div class="sidebar-item">
+                <span class="folder-icon">📖</span>
+                <span>Reading List</span>
+              </div>
+              <div class="sidebar-item">
+                <span class="folder-icon">📄</span>
+                <span>To Review</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Content Area -->
+          <div class="main-content">
+            <div class="papers-list">
+              <div class="list-header">
+                <span class="column-title">Title</span>
+              </div>
+              <div class="paper-item">
+                <span class="paper-icon">📄</span>
+                <span class="paper-title">Learning Interactions and Relationships Between Movie Characters</span>
+              </div>
+              <div class="paper-item">
+                <span class="paper-icon">📄</span>
+                <span class="paper-title">Dict-BERT: Enhancing Language Model Pre-training with Dictionary</span>
+              </div>
+              <div class="paper-item">
+                <span class="paper-icon">📄</span>
+                <span class="paper-title">MERLOT: Multimodal Neural Script Knowledge Models</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Synthesize Window -->
+          <div class="synthesize-window" id="synthesizeWindow">
+            <div class="synthesize-header">
+              <h3>Synthesize</h3>
+              <button class="close-btn">×</button>
+            </div>
+
+            <div class="synthesize-content" id="synthesizeContent">
+              <div class="welcome-message" id="welcomeMessage">
+                <h4>Welcome to Literati!</h4>
+                <p class="context-info">No papers selected (type @ to mention papers) <span class="token-count">~0 tokens</span></p>
+              </div>
+
+              <!-- Chat Messages Container -->
+              <div class="chat-messages" id="chatMessages"></div>
+            </div>
+
+            <div class="synthesize-input">
+              <input type="text" id="userInput" placeholder="What do you want to know?" readonly>
+              <button class="send-btn">↑</button>
+            </div>
+
+            <!-- Approval Screen -->
+            <div class="approval-screen" id="approvalScreen">
+              <div class="approval-header">
+                <h3>Synthesize</h3>
+              </div>
+              <div class="approval-content" id="approvalContent">
+                <!-- Content will be injected by JavaScript -->
+              </div>
+              <div class="approval-actions">
+                <button class="approval-btn accept" id="acceptBtn">
+                  <span>✓</span> Accept (⌘+J)
+                </button>
+                <button class="approval-btn reject" id="rejectBtn">
+                  <span>✕</span> Reject (⌘+⌥+J)
+                </button>
+                <input type="text" class="follow-up-input" placeholder="Add a follow up request" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
