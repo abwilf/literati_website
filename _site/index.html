@@ -32,11 +32,16 @@
 
 <section class="demo-section">
   <div class="container">
-    <h2 class="section-title">See Literati in Action</h2>
-    <p class="demo-subtitle">AI-powered research assistant for your academic papers</p>
-    <div class="mockup-badge">Interactive Demo (not exactly what it looks like)</div>
+    <h2 class="section-title">How It Works</h2>
+    <p class="demo-subtitle">Animated walkthrough of Literati's core features</p>
+    <div class="mockup-badge">🎬 Conceptual Demo · Actual interface may vary</div>
 
     <div class="app-mockup">
+      <div class="animated-cursor" id="animatedCursor">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="black" stroke-width="1">
+          <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/>
+        </svg>
+      </div>
       <!-- App Window -->
       <div class="window-frame">
         <div class="window-titlebar">
@@ -129,10 +134,10 @@
               </div>
               <div class="approval-actions">
                 <button class="approval-btn accept" id="acceptBtn">
-                  <span>✓</span> Accept (⌘+J)
+                  <span>✓</span> Accept (⌘+Enter)
                 </button>
                 <button class="approval-btn reject" id="rejectBtn">
-                  <span>✕</span> Reject (⌘+⌥+J)
+                  <span>✕</span> Reject (⇧+⌘+Delete)
                 </button>
                 <input type="text" class="follow-up-input" placeholder="Add a follow up request" readonly>
               </div>

@@ -10,6 +10,38 @@
   const approvalContent = document.getElementById('approvalContent');
   const acceptBtn = document.getElementById('acceptBtn');
   const rejectBtn = document.getElementById('rejectBtn');
+  const cursor = document.getElementById('animatedCursor');
+  const synthesizeWindow = document.getElementById('synthesizeWindow');
+
+  // Helper function to move cursor to element
+  function moveCursorTo(element, offsetX = 0, offsetY = 0) {
+    return new Promise((resolve) => {
+      const rect = element.getBoundingClientRect();
+      const mockupRect = document.querySelector('.app-mockup').getBoundingClientRect();
+      const targetX = rect.left - mockupRect.left + offsetX;
+      const targetY = rect.top - mockupRect.top + offsetY;
+
+      cursor.style.left = targetX + 'px';
+      cursor.style.top = targetY + 'px';
+      cursor.classList.add('visible');
+
+      setTimeout(resolve, 600);
+    });
+  }
+
+  // Helper function to add annotation
+  function addAnnotation(text, x, y, direction = 'top') {
+    const annotation = document.createElement('div');
+    annotation.className = `annotation ${direction}`;
+    annotation.textContent = text;
+    annotation.style.left = x + 'px';
+    annotation.style.top = y + 'px';
+    document.querySelector('.app-mockup').appendChild(annotation);
+
+    setTimeout(() => annotation.classList.add('visible'), 100);
+
+    return annotation;
+  }
 
   // Helper function to type text character by character
   function typeText(element, text, speed = 50) {
@@ -58,10 +90,56 @@
     // Wait a bit before starting
     await wait(1500);
 
+    // Step 1: Show annotation about papers list
+    const papersAnnotation = addAnnotation('1. Select papers to add to context', 400, 150, 'top');
+    await wait(1000);
+
+    // Move cursor to first paper and highlight it
+    const firstPaper = document.querySelectorAll('.paper-item')[0];
+    await moveCursorTo(firstPaper, 20, 15);
+    firstPaper.classList.add('highlighted');
+
+    await wait(600);
+
+    // Update context to show paper was added
+    contextInfo.innerHTML = '● 1 paper selected <span class="token-count">~850 tokens</span>';
+
+    await wait(600);
+
+    // Move to second paper
+    const secondPaper = document.querySelectorAll('.paper-item')[1];
+    await moveCursorTo(secondPaper, 20, 15);
+    firstPaper.classList.remove('highlighted');
+    secondPaper.classList.add('highlighted');
+
+    await wait(600);
+
+    // Update context
+    contextInfo.innerHTML = '● 2 papers selected <span class="token-count">~1,700 tokens</span>';
+
+    await wait(800);
+    secondPaper.classList.remove('highlighted');
+
+    papersAnnotation.remove();
+
+    // Step 2: Open Synthesize window
+    const synthesizeAnnotation = addAnnotation('2. Open chat (⌘+K)', 700, 250, 'left');
+    await wait(800);
+
+    synthesizeWindow.classList.add('visible');
+    cursor.classList.remove('visible');
+
+    await wait(1000);
+    synthesizeAnnotation.remove();
+
     // Hide welcome message
     welcomeMessage.style.display = 'none';
 
-    // Step 1: Show autocomplete when user types @
+    // Step 3: Add another paper with @ mention
+    const contextAnnotation = addAnnotation('3. Use @ to add more papers, # to remove', 500, 480, 'top');
+    await wait(800);
+
+    // Show autocomplete when user types @
     await typeText(userInput, '@', 100);
     await wait(500);
 
@@ -69,14 +147,6 @@
     autocompleteMenu.className = 'autocomplete-menu';
     autocompleteMenu.innerHTML = `
       <div class="autocomplete-item selected">
-        <strong>@defferrardConvolutionalNeuralNetworks2017</strong>
-        <small>Convolutional Neural Networks on Graphs | Defferrard et al.</small>
-      </div>
-      <div class="autocomplete-item">
-        <strong>@velickovicGraphAttentionNetworks2018</strong>
-        <small>Graph Attention Networks | Veličković et al.</small>
-      </div>
-      <div class="autocomplete-item">
         <strong>@blumTheoreticalComputerScience2021</strong>
         <small>A Theoretical Computer Science Perspective on Consciousness | Blum & Blum</small>
       </div>
@@ -84,61 +154,67 @@
     chatMessages.appendChild(autocompleteMenu);
     await wait(1500);
 
-    // Step 2: Select first paper
+    // Select paper
     userInput.value = '';
     autocompleteMenu.remove();
+    contextAnnotation.remove();
 
     const papersSelected = document.createElement('div');
     papersSelected.className = 'papers-selected';
-    papersSelected.innerHTML = '<span class="paper-chip">📄 @defferrardConvolutionalNeuralNetworks2017</span>';
+    papersSelected.innerHTML = '<span class="paper-chip">📄 @blumTheoreticalComputerScience2021</span>';
     chatMessages.appendChild(papersSelected);
 
     // Update context info
-    contextInfo.innerHTML = '● 1 paper selected (notes + abstracts) <span class="token-count">~1,024 tokens</span>';
-
-    await wait(800);
-
-    // Add second paper
-    papersSelected.innerHTML += '<span class="paper-chip">📄 @velickovicGraphAttentionNetworks2018</span>';
-    contextInfo.innerHTML = '● 2 papers selected (notes + abstracts) <span class="token-count">~2,048 tokens</span>';
-
-    await wait(800);
-
-    // Add third paper
-    papersSelected.innerHTML += '<span class="paper-chip">📄 @blumTheoreticalComputerScience2021</span>';
-    contextInfo.innerHTML = '● 3 papers selected (notes + abstracts) <span class="token-count">~2,645 tokens</span>';
+    contextInfo.innerHTML = '● 3 papers selected <span class="token-count">~2,645 tokens</span>';
 
     await wait(1200);
 
-    // Step 3: User asks question
-    await typeText(userInput, 'What are these papers about?', 60);
+    // Step 4: Ask question
+    const questionAnnotation = addAnnotation('4. Ask questions about your papers', 500, 480, 'top');
+    await wait(600);
+
+    await typeText(userInput, 'How do these papers differ?', 60);
+    questionAnnotation.remove();
     await wait(800);
 
     papersSelected.remove();
-    addMessage('user', 'What are these papers about?');
+    addMessage('user', 'How do these papers differ?');
     userInput.value = '';
 
     await wait(500);
 
-    // Step 4: Show typing indicator
+    // Step 5: AI responds
+    const aiAnnotation = addAnnotation('5. AI responds to the user\'s query', 500, 100, 'top');
+    await wait(400);
+
     const typing = showTyping();
     await wait(2000);
     typing.remove();
+    aiAnnotation.remove();
 
-    // Step 5: Show AI response
+    // Show AI response
     const response = addMessage('assistant', `
-      Here is a summary of each paper based on the provided abstracts and notes:<br><br>
+      These three papers differ significantly in their domains and approaches:<br><br>
 
-      <strong>Target-Guided Open-Domain Conversation:</strong> This paper addresses directing open-domain conversational agents towards specific goals and target subjects. The system uses coarse-grained keywords to control responses, enabling applications like recommendations and education. The paper introduces a keyword-augmented conversation dataset and demonstrates significant improvements in conversation quality.<br><br>
+      <strong>Learning Interactions (Movie Characters):</strong> Focuses on <em>conversational AI and dialogue systems</em>, specifically guiding open-domain conversations toward target subjects using keywords and discourse-level constraints. Application-oriented for chatbots and recommendation systems.<br><br>
 
-      <strong>Graph Attention Networks:</strong> This paper introduces Graph Attention Networks (GATs), a neural network architecture for graph-structured data. GATs use masked self-attention layers to weight neighbors' features, addressing limitations of spectral-based methods. The model achieves state-of-the-art results on multiple graph datasets.<br><br>
+      <strong>Dict-BERT & MERLOT:</strong> Both are <em>deep learning architecture papers</em> for NLP, but Dict-BERT enhances language model pre-training with dictionary knowledge, while MERLOT tackles multimodal learning combining text and video for script knowledge.<br><br>
 
-      <strong>A Theoretical Computer Science Perspective on Consciousness:</strong> This paper explores consciousness from a theoretical computer science angle, focusing on the Global Workspace Theory (GWT) and formalizing it through the Conscious Turing Machine (CTM). The paper provides a formal definition of consciousness and suggests why this model might experience consciousness.
+      <strong>Theoretical CS Perspective on Consciousness:</strong> Takes a <em>purely theoretical</em> approach from computer science, formalizing consciousness through the Conscious Turing Machine model based on Global Workspace Theory. Unlike the others, it's not about practical ML applications but foundational theoretical questions.
     `);
 
     await wait(3000);
 
-    // Step 6: User types /note command
+    // Step 6: /note command
+    // Scroll chat to bottom first
+    const synthesizeContent = document.getElementById('synthesizeContent');
+    synthesizeContent.scrollTop = synthesizeContent.scrollHeight;
+
+    await wait(400);
+
+    const noteAnnotation = addAnnotation('6. Use /note to update paper notes', 500, 480, 'top');
+    await wait(600);
+
     await typeText(userInput, '/note', 80);
     await wait(600);
 
@@ -147,10 +223,14 @@
     commandHint.textContent = 'Use AI to add to notes for papers (Optionally include instructions)';
     chatMessages.appendChild(commandHint);
 
+    // Scroll to show the hint
+    synthesizeContent.scrollTop = synthesizeContent.scrollHeight;
+
     await wait(1500);
 
-    // Step 7: Execute /note command
+    // Execute /note command
     commandHint.remove();
+    noteAnnotation.remove();
     addMessage('user', '/note');
     userInput.value = '';
 
@@ -160,30 +240,45 @@
     await wait(2500);
     typing2.remove();
 
-    // Step 8: Show approval screen
+    // Step 7: Show approval screen
+    await wait(200);
     approvalContent.innerHTML = `
-      <div class="change-title">Change 1 of 2: Target-Guided Open-Domain Conversation</div>
+      <div class="change-title">Change 1 of 3: Learning Interactions and Relationships Between Movie Characters</div>
       <div class="diff-view">
         <div class="diff-header">Updated notes for paper:</div>
-        <div class="diff-line removed">- [TLDR] Quantitative and human evaluations show the proposed structured approach to imposing conversational goals on open-domain chat agents can produce meaningful and effective conversations, significantly improving over other approaches.</div>
-        <div class="diff-line added">+ [TLDR] Quantitative and human evaluations show the proposed structured approach to imposing conversational goals on open-domain chat agents can produce meaningful and effective conversations, significantly improving over other approaches. The paper specifically addresses challenges in steering conversations naturally to a designated target subject, using coarse-grained keywords and discourse-level constraints, and introduces a keyword-augmented conversation dataset.</div>
+        <div class="diff-line removed">- [TLDR] Proposes a system for guiding open-domain conversations toward target subjects using keyword-based control.</div>
+        <div class="diff-line added">+ [TLDR] Proposes a system for guiding open-domain conversations toward target subjects using keyword-based control. Differs from Dict-BERT and MERLOT by focusing on conversational AI rather than language model architectures, and contrasts with the Consciousness paper's theoretical approach by being application-oriented for chatbots and recommendation systems.</div>
       </div>
     `;
     approvalScreen.classList.add('active');
 
-    await wait(3000);
+    await wait(800);
+
+    // Add annotation pointing to accept/reject buttons
+    const approvalAnnotation = addAnnotation('7. Review and accept changes', 200, 530, 'top');
+
+    await wait(2500);
 
     // Simulate accepting the change
+    approvalAnnotation.remove();
     approvalScreen.classList.remove('active');
 
     await wait(1000);
 
     // Loop the animation
     await wait(2000);
+
+    // Reset everything
     chatMessages.innerHTML = '';
     welcomeMessage.style.display = 'block';
     contextInfo.innerHTML = 'No papers selected (type @ to mention papers) <span class="token-count">~0 tokens</span>';
     userInput.value = '';
+    synthesizeWindow.classList.remove('visible');
+    cursor.classList.remove('visible');
+
+    // Remove any lingering annotations
+    document.querySelectorAll('.annotation').forEach(a => a.remove());
+    document.querySelectorAll('.paper-item').forEach(p => p.classList.remove('highlighted'));
 
     // Restart demo
     runDemo();
