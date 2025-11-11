@@ -1,8 +1,8 @@
 # Site settings
 title: Literati
 description: Your intelligent reading companion
-url: ""
-baseurl: "/literati_website"  # Change this to match your GitHub repo name
+url: "https://getliterati.com"
+baseurl: ""
 
 # Build settings
 markdown: kramdown
