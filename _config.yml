@@ -1,0 +1,13 @@
+# Site settings
+title: Literati
+description: Your intelligent reading companion
+url: ""
+baseurl: ""
+
+# Build settings
+markdown: kramdown
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bundle install:*)",
+      "Bash(jekyll serve)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
