@@ -2,7 +2,7 @@
 title: Literati
 description: Your intelligent reading companion
 url: ""
-baseurl: ""
+baseurl: "/literati_website"  # Change this to match your GitHub repo name
 
 # Build settings
 markdown: kramdown
