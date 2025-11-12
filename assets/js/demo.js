@@ -71,7 +71,8 @@
     messageDiv.className = `message ${type}-message`;
     messageDiv.innerHTML = content;
     chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    // Use scrollIntoView instead of scrollTop to prevent jumping on mobile
+    messageDiv.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'nearest' });
     return messageDiv;
   }
 
@@ -81,7 +82,8 @@
     typingDiv.className = 'message typing-indicator';
     typingDiv.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
     chatMessages.appendChild(typingDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    // Use scrollIntoView instead of scrollTop to prevent jumping on mobile
+    typingDiv.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'nearest' });
     return typingDiv;
   }
 
@@ -206,9 +208,12 @@
     await wait(3000);
 
     // Step 6: /note command
-    // Scroll chat to bottom first
+    // Scroll chat to bottom first - using smooth scroll to prevent jumping on mobile
     const synthesizeContent = document.getElementById('synthesizeContent');
-    synthesizeContent.scrollTop = synthesizeContent.scrollHeight;
+    const lastMessage = chatMessages.lastElementChild;
+    if (lastMessage) {
+      lastMessage.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
+    }
 
     await wait(400);
 
@@ -223,8 +228,8 @@
     commandHint.textContent = 'Use AI to add to notes for papers (Optionally include instructions)';
     chatMessages.appendChild(commandHint);
 
-    // Scroll to show the hint
-    synthesizeContent.scrollTop = synthesizeContent.scrollHeight;
+    // Scroll to show the hint - using scrollIntoView to prevent jumping on mobile
+    commandHint.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'nearest' });
 
     await wait(1500);
 

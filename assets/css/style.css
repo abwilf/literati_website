@@ -179,6 +179,8 @@ body {
 .demo-section {
   padding: 100px 0;
   background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+  overflow: hidden;
+  position: relative;
 }
 
 .demo-subtitle {
@@ -213,6 +215,8 @@ body {
   max-width: 1400px;
   margin: 0 auto;
   position: relative;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 /* Animated Cursor */
@@ -485,6 +489,9 @@ body {
   flex: 1;
   padding: 24px;
   overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .welcome-message {
@@ -511,6 +518,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  overscroll-behavior: contain;
 }
 
 .message {
@@ -936,6 +944,7 @@ body {
 
   .demo-section {
     padding: 60px 0;
+    overscroll-behavior: none;
   }
 
   .sidebar {
@@ -944,6 +953,7 @@ body {
 
   .app-content {
     height: 500px;
+    overscroll-behavior: contain;
   }
 
   .synthesize-window {
@@ -957,6 +967,12 @@ body {
 
   .paper-title {
     font-size: 0.85rem;
+  }
+
+  /* Prevent page scrolling issues on mobile */
+  .app-mockup {
+    overscroll-behavior: none;
+    isolation: isolate;
   }
 }
 
